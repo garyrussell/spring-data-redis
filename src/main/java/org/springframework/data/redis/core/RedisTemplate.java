@@ -482,8 +482,13 @@ public class RedisTemplate<K, V> extends RedisAccessor implements RedisOperation
 
 	@SuppressWarnings("unchecked")
 	private byte[] rawValue(Object value) {
-		if(valueSerializer == null && value instanceof byte[]) {
-			return (byte[]) value;
+		if(valueSerializer == null) {
+			if (value instanceof byte[]) {
+				return (byte[]) value;
+			}
+			else {
+				throw new IllegalArgumentException("A value serializer is required unless the value is a byte[]");
+			}
 		}
 		return valueSerializer.serialize(value);
 	}
